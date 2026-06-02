@@ -3,7 +3,7 @@ require('dotenv').config({ path: '.env.local' });
 
 const serverless = require('serverless-http');
 const { connectDatabase } = require('../src/db');
-const { loadModels } = require('../src/loadModels');
+const { applyCorsHeaders } = require('../src/corsConfig');
 
 let handler;
 
@@ -17,6 +17,13 @@ async function getHandler() {
 }
 
 module.exports = async (req, res) => {
+  applyCorsHeaders(req, res);
+
+  // Preflight — responder antes de MongoDB/Express (evita CORS em cold start)
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
   try {
     const fn = await getHandler();
     return await fn(req, res);
