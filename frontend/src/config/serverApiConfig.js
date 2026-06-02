@@ -1,9 +1,21 @@
 const useRemoteBackend =
   import.meta.env.PROD || import.meta.env.VITE_DEV_REMOTE === 'remote';
 
+const PLACEHOLDER_HOSTS = ['your_backend_url_server.com', 'your_url_backend_server.com'];
+
 function normalizeBaseUrl(url) {
   if (!url || typeof url !== 'string') return '';
   return url.endsWith('/') ? url : `${url}/`;
+}
+
+function isPlaceholderUrl(url) {
+  if (!url) return true;
+  try {
+    const host = new URL(url).hostname;
+    return PLACEHOLDER_HOSTS.includes(host);
+  } catch {
+    return true;
+  }
 }
 
 const remoteBackend = normalizeBaseUrl(import.meta.env.VITE_BACKEND_SERVER);
@@ -11,9 +23,10 @@ const remoteFiles = normalizeBaseUrl(
   import.meta.env.VITE_FILE_BASE_URL || import.meta.env.VITE_BACKEND_SERVER
 );
 
-if (useRemoteBackend && !remoteBackend) {
+if (useRemoteBackend && (!remoteBackend || isPlaceholderUrl(remoteBackend))) {
   console.error(
-    '[gestpr] Defina VITE_BACKEND_SERVER na Vercel (ex.: https://teu-api.onrender.com/)'
+    '[gestpr] VITE_BACKEND_SERVER inválido ou em falta. Na Vercel (projeto gestpr-app):',
+    'VITE_BACKEND_SERVER=https://gestpr-backend.vercel.app/ → depois Redeploy'
   );
 }
 
