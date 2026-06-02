@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const readBySettingKey = require('@/middlewares/settings/readBySettingKey');
-const { increaseBySettingKey } = require('@/middlewares/settings');
+const readBySettingKey = require('../../../middlewares/settings/readBySettingKey');
+const { increaseBySettingKey } = require('../../../middlewares/settings');
 
 module.exports = async (req, res) => {
   const Quote = mongoose.model('Quote');

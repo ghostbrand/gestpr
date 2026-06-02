@@ -1,6 +1,6 @@
-const sendMail = require('@/controllers/middlewaresControllers/createAuthMiddleware/sendMail');
-const loadSettings = require('@/middlewares/settings/loadSettings');
-const { useAppSettings } = require('@/settings');
+const sendMail = require('../middlewaresControllers/createAuthMiddleware/sendMail');
+const loadSettings = require('../../middlewares/settings/loadSettings');
+const { useAppSettings } = require('../../settings');
 
 exports.test = async (req, res) => {
   try {

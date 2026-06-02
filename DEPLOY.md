@@ -27,6 +27,9 @@ Cria um cluster e copia a connection string para `DATABASE`.
 
 ### Projeto `gestpr-backend` na Vercel (opcional)
 
+**Obrigatório:** em Settings → General → **Root Directory** = `backend`  
+(Sem isto, o deploy usa a raiz do repo, ignora `backend/api/index.js` e o alias `@/` falha.)
+
 - **Root Directory**: `backend`
 - O `backend/vercel.json` envia todo o tráfego para `api/index.js` (com `registerAliases` + MongoDB)
 - Variáveis obrigatórias: `DATABASE`, `JWT_SECRET`, `NODE_ENV=production`, `PUBLIC_SERVER_FILE`, `PUBLIC_APP_URL`

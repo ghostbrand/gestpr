@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const custom = require('@/controllers/pdfController');
+const custom = require('../pdfController');
 
 const Invoice = mongoose.model('Invoice');
 const Payment = mongoose.model('Payment');
