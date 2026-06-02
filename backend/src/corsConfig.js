@@ -20,7 +20,15 @@ function getAllowedOrigin(origin) {
 
 function applyCorsHeaders(req, res) {
   const origin = req.headers.origin;
-  const allowed = getAllowedOrigin(origin);
+  let allowed = getAllowedOrigin(origin);
+
+  // Produção: garantir header mesmo se PUBLIC_APP_URL não estiver definido
+  if (!allowed && origin && /gestpr-app/i.test(origin)) {
+    allowed = origin;
+  }
+  if (!allowed && process.env.NODE_ENV === 'production') {
+    allowed = 'https://gestpr-app.vercel.app';
+  }
 
   if (allowed) {
     res.setHeader('Access-Control-Allow-Origin', allowed);
