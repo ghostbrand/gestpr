@@ -1,5 +1,9 @@
 require('./registerAliases');
 
+const { loadModels } = require('./loadModels');
+// Regista schemas antes das rotas (evita MissingSchemaError se a Vercel carregar app.js direto)
+loadModels();
+
 const express = require('express');
 const mongoose = require('mongoose');
 

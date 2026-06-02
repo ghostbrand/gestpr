@@ -10,7 +10,6 @@ let handler;
 async function getHandler() {
   if (!handler) {
     await connectDatabase();
-    loadModels();
     const app = require('../src/app');
     handler = serverless(app);
   }
