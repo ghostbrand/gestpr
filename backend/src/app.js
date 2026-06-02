@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 
 const cors = require('cors');
 const compression = require('compression');
@@ -35,6 +36,14 @@ app.use(compression());
 // app.use(fileUpload());
 
 // Here our API Routes
+
+app.get('/api/health', (req, res) => {
+  const dbReady = mongoose.connection.readyState === 1;
+  res.status(dbReady ? 200 : 503).json({
+    ok: dbReady,
+    db: dbReady ? 'connected' : 'disconnected',
+  });
+});
 
 app.use('/api', coreAuthRouter);
 app.use('/api', adminAuth.isValidAuthToken, coreApiRouter);

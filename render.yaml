@@ -1,0 +1,28 @@
+# Blueprint Render: API Express + MongoDB Atlas
+# Dashboard: New > Blueprint > liga este repositório
+# Depois do primeiro deploy: Shell > cd backend && npm run setup
+services:
+  - type: web
+    name: gestpr-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PUBLIC_SERVER_FILE
+        sync: false
+      - key: PUBLIC_APP_URL
+        sync: false
+      - key: MAIL_TRANSPORT
+        value: resend
+      - key: RESEND_API
+        sync: false
+      - key: MAIL_FROM
+        sync: false
