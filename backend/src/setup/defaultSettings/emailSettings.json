@@ -1,0 +1,39 @@
+[
+  {
+    "settingCategory": "email_settings",
+    "settingKey": "mail_transport",
+    "settingValue": "resend",
+    "valueType": "string"
+  },
+  {
+    "settingCategory": "email_settings",
+    "settingKey": "smtp_host",
+    "settingValue": "",
+    "valueType": "string"
+  },
+  {
+    "settingCategory": "email_settings",
+    "settingKey": "smtp_port",
+    "settingValue": 587,
+    "valueType": "number"
+  },
+  {
+    "settingCategory": "email_settings",
+    "settingKey": "smtp_secure",
+    "settingValue": false,
+    "valueType": "boolean"
+  },
+  {
+    "settingCategory": "email_settings",
+    "settingKey": "smtp_user",
+    "settingValue": "",
+    "valueType": "string"
+  },
+  {
+    "settingCategory": "email_settings",
+    "settingKey": "smtp_password",
+    "settingValue": "",
+    "valueType": "string",
+    "isPrivate": true
+  }
+]

@@ -1,0 +1,62 @@
+.list-checked {
+  padding-left: 0px;
+  list-style: none;
+}
+.list-checked-item {
+  position: relative;
+  display: block;
+  color: #677788;
+  margin-bottom: 30px;
+  list-style: none;
+}
+
+.list-checked-item-right{
+  padding-right: 1.75rem;
+}
+
+.list-checked-item-left{
+  padding-left: 1.75rem;
+}
+
+.list-checked-item::before {
+  position: absolute;
+  top: 0;
+  width: 1rem;
+  height: 1rem;
+  background-image: url(../images/checklist.svg);
+  content: '';
+  margin-top: 0.125rem;
+}
+
+.list-checked-item-right::before{
+  right: 0;
+}
+.list-checked-item-left::before{
+  left: 0;
+}
+
+
+.auth-page-layout__hero .sideContent .ant-typography {
+  color: rgba(15, 23, 42, 0.82) !important;
+}
+
+.auth-page-layout__hero .sideContent .ant-typography.ant-typography-secondary {
+  color: rgba(15, 23, 42, 0.55) !important;
+}
+
+.auth-page-layout__form {
+  background: #ffffff !important;
+}
+
+.auth-page-layout__form .site-layout-content {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 767px) {
+  .auth-page-layout__form .ant-layout-content {
+    padding-left: clamp(16px, 4vw, 24px) !important;
+    padding-right: clamp(16px, 4vw, 24px) !important;
+  }
+}
