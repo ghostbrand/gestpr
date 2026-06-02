@@ -1,52 +1,53 @@
-# Deploy gestpr (Vercel + Render)
+# Deploy gestpr — dois sites na Vercel
+
+## Qual URL abrir?
+
+| Projeto Vercel | Root Directory | Quem abre no browser? |
+|----------------|----------------|------------------------|
+| **gestpr** (frontend) | `frontend` ou raiz com `vercel.json` da raiz | **Utilizadores** — app React |
+| **gestpr-backend** (API) | `backend` | **Ninguém** — só JSON/API |
+
+Se abrires `gestpr-backend.vercel.app` vês erro de Serverless ou uma página “API”. Isso é normal. O ERP está noutro projeto/URL.
+
+---
 
 ## 1. MongoDB Atlas
 
-Cria um cluster e copia a connection string para `DATABASE`.
+Connection string em `DATABASE`. **Network Access** → `0.0.0.0/0`.
 
-## 2. API no Render
+---
 
-1. [render.com](https://render.com) → **New** → **Blueprint** → repositório `gestpr`
-2. Define manualmente:
-   - `DATABASE` — URI MongoDB
-   - `PUBLIC_SERVER_FILE` — `https://<nome-do-servico>.onrender.com/`
-   - `PUBLIC_APP_URL` — URL da Vercel (ex. `https://gestpr.vercel.app`)
-   - `RESEND_API` / `MAIL_FROM` (opcional, e-mail)
-3. Após o primeiro deploy com sucesso: **Shell** → `cd backend && npm run setup`
-4. Testa: `https://<teu-api>.onrender.com/api/health` → `{"ok":true,"db":"connected"}`
+## 2. Backend — projeto `gestpr-backend`
 
-## 3. Frontend na Vercel
+- **Root Directory:** `backend`
+- **Variáveis:** `DATABASE`, `JWT_SECRET`, `NODE_ENV=production`, `PUBLIC_SERVER_FILE` = `https://gestpr-backend.vercel.app/`, `PUBLIC_APP_URL` = URL do frontend
+- Testes (sem MongoDB): `https://gestpr-backend.vercel.app/api/ping`
+- Com MongoDB: `https://gestpr-backend.vercel.app/api/health`
+- Primeira vez: Shell → `npm run setup`
 
-1. Importa o mesmo repositório
-2. **Root Directory**: deixa em branco (usa `vercel.json` na raiz) **ou** `frontend`
-3. **Environment variables** (Production):
-   - `VITE_BACKEND_SERVER` = `https://<teu-api>.onrender.com/`
-   - `VITE_FILE_BASE_URL` = mesma URL do API
-   - `VITE_APP_URL` = `https://<teu-site>.vercel.app/` (opcional)
-4. Redeploy
+Alternativa mais estável para PDFs: [Render](https://render.com) com `render.yaml` na raiz.
 
-### Projeto `gestpr-backend` na Vercel (opcional)
+---
 
-**Obrigatório:** em Settings → General → **Root Directory** = `backend`  
-(Sem isto, o deploy usa a raiz do repo, ignora `backend/api/index.js` e o alias `@/` falha.)
+## 3. Frontend — projeto novo na Vercel (ex.: `gestpr`)
 
-- **Root Directory**: `backend`
-- O `backend/vercel.json` envia todo o tráfego para `api/index.js` (com `registerAliases` + MongoDB)
-- Variáveis obrigatórias: `DATABASE`, `JWT_SECRET`, `NODE_ENV=production`, `PUBLIC_SERVER_FILE`, `PUBLIC_APP_URL`
-- **Limitação**: geração de PDF (`html-pdf`) pode falhar na Vercel; para PDFs estáveis, usa Render
+1. **Add New Project** → mesmo repo GitHub
+2. **Root Directory:** `frontend`
+3. **Environment Variables** (Production):
+   - `VITE_BACKEND_SERVER` = `https://gestpr-backend.vercel.app/`
+   - `VITE_FILE_BASE_URL` = `https://gestpr-backend.vercel.app/`
+   - `VITE_APP_URL` = `https://gestpr.vercel.app/` (o URL que a Vercel der a este projeto)
+4. Deploy → abre **este** URL no browser (não o do backend)
 
-### Projeto frontend na Vercel
-
-Não uses a pasta `backend` como root no projeto do frontend.
-
-**Nota:** O `.vercelignore` na raiz não deve listar `backend/` — isso apaga o API no deploy e o `npm install` falha com código 254.
+---
 
 ## 4. Local
 
 ```bash
-# Terminal 1
 cd backend && npm install && npm run setup && npm run dev
-
-# Terminal 2
 cd frontend && npm install && npm run dev
 ```
+
+---
+
+**Nota:** `.vercelignore` na raiz não pode incluir `backend/`.

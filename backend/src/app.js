@@ -40,12 +40,27 @@ app.use(compression());
 // Here our API Routes
 
 app.get('/', (req, res) => {
-  res.json({
+  const payload = {
     ok: true,
     service: 'gestpr-api',
+    message: 'Isto é só o API. Os utilizadores devem abrir o site do frontend (projeto Vercel separado).',
     health: '/api/health',
+    ping: '/api/ping',
     login: '/api/login',
-  });
+  };
+
+  if (req.accepts('html')) {
+    return res.status(200).type('html').send(`<!DOCTYPE html>
+<html lang="pt"><head><meta charset="utf-8"/><title>gestpr API</title></head>
+<body style="font-family:system-ui;max-width:40rem;margin:3rem auto;padding:0 1rem">
+<h1>gestpr — API</h1>
+<p>Este URL é o <strong>backend</strong>, não a aplicação web.</p>
+<p>Abre o projeto Vercel do <strong>frontend</strong> (pasta <code>frontend</code>) para ver o ERP.</p>
+<p>Testes: <a href="/api/ping">/api/ping</a> · <a href="/api/health">/api/health</a></p>
+</body></html>`);
+  }
+
+  res.json(payload);
 });
 
 app.get('/api/health', (req, res) => {
