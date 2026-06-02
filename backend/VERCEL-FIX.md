@@ -15,10 +15,13 @@ Vercel → **gestpr-backend** → Settings → General → **Delete Project**
 2. Importa o repo **gestpr** (GitHub)
 3. **Project Name:** `gestpr-backend`
 4. **Root Directory:** clica **Edit** → escreve `backend` → **Continue**
-5. **Framework Preset:** Other (não Vite, não Next)
-6. **Build Command:** deixa vazio ou `npm install`
-7. **Output Directory:** deixa vazio
+5. **Framework Preset:** Other
+6. **Build Command:** ⚠️ **APAGA / deixa VAZIO** (não uses `cd frontend...`)
+7. **Output Directory:** ⚠️ **VAZIO**
 8. **Install Command:** `npm install`
+
+> Se aparecer `cd frontend: No such file or directory`, o Build Command está errado no dashboard.
+> Vai a Settings → General → Build & Development Settings → apaga o Build Command override.
 
 ### 3. Environment Variables (antes de Deploy)
 | Nome | Valor |
