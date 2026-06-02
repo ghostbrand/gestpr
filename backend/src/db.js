@@ -1,26 +1,32 @@
 const mongoose = require('mongoose');
 
-let connectionPromise = null;
+const globalCache = global.__gestprMongoose || (global.__gestprMongoose = { promise: null });
 
 function connectDatabase() {
   if (!process.env.DATABASE) {
-    throw new Error('DATABASE is not set. Add your MongoDB connection string to the environment.');
+    throw new Error(
+      'DATABASE is not set. Add your MongoDB URI in Vercel → Settings → Environment Variables.'
+    );
   }
 
   if (mongoose.connection.readyState === 1) {
     return Promise.resolve(mongoose.connection);
   }
 
-  if (!connectionPromise) {
-    connectionPromise = mongoose
+  if (!globalCache.promise) {
+    globalCache.promise = mongoose
       .connect(process.env.DATABASE, {
-        serverSelectionTimeoutMS: 60_000,
-        connectTimeoutMS: 60_000,
+        serverSelectionTimeoutMS: 30_000,
+        connectTimeoutMS: 30_000,
       })
-      .then(() => mongoose.connection);
+      .then(() => mongoose.connection)
+      .catch((error) => {
+        globalCache.promise = null;
+        throw error;
+      });
   }
 
-  return connectionPromise;
+  return globalCache.promise;
 }
 
 mongoose.connection.on('error', (error) => {

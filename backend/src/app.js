@@ -39,6 +39,15 @@ app.use(compression());
 
 // Here our API Routes
 
+app.get('/', (req, res) => {
+  res.json({
+    ok: true,
+    service: 'gestpr-api',
+    health: '/api/health',
+    login: '/api/login',
+  });
+});
+
 app.get('/api/health', (req, res) => {
   const dbReady = mongoose.connection.readyState === 1;
   res.status(dbReady ? 200 : 503).json({
