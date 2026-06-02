@@ -1,6 +1,7 @@
 const useRemoteBackend =
   import.meta.env.PROD || import.meta.env.VITE_DEV_REMOTE === 'remote';
 
+const PRODUCTION_API_URL = 'https://gestpr-backend.vercel.app/';
 const PLACEHOLDER_HOSTS = ['your_backend_url_server.com', 'your_url_backend_server.com'];
 
 function normalizeBaseUrl(url) {
@@ -11,24 +12,36 @@ function normalizeBaseUrl(url) {
 function isPlaceholderUrl(url) {
   if (!url) return true;
   try {
-    const host = new URL(url).hostname;
-    return PLACEHOLDER_HOSTS.includes(host);
+    return PLACEHOLDER_HOSTS.includes(new URL(url).hostname);
   } catch {
     return true;
   }
 }
 
-const remoteBackend = normalizeBaseUrl(import.meta.env.VITE_BACKEND_SERVER);
-const remoteFiles = normalizeBaseUrl(
-  import.meta.env.VITE_FILE_BASE_URL || import.meta.env.VITE_BACKEND_SERVER
-);
+function resolveBackendUrl(raw) {
+  let url = normalizeBaseUrl(raw);
 
-if (useRemoteBackend && (!remoteBackend || isPlaceholderUrl(remoteBackend))) {
-  console.error(
-    '[gestpr] VITE_BACKEND_SERVER inválido ou em falta. Na Vercel (projeto gestpr-app):',
-    'VITE_BACKEND_SERVER=https://gestpr-backend.vercel.app/ → depois Redeploy'
-  );
+  if (isPlaceholderUrl(url)) url = '';
+
+  // Mixed content: em produção força HTTPS
+  if (import.meta.env.PROD && url.startsWith('http://')) {
+    url = url.replace('http://', 'https://');
+  }
+
+  if (!url && import.meta.env.PROD) {
+    return PRODUCTION_API_URL;
+  }
+
+  return url;
 }
+
+const remoteBackend = useRemoteBackend
+  ? resolveBackendUrl(import.meta.env.VITE_BACKEND_SERVER)
+  : '';
+
+const remoteFiles = useRemoteBackend
+  ? resolveBackendUrl(import.meta.env.VITE_FILE_BASE_URL || import.meta.env.VITE_BACKEND_SERVER)
+  : '';
 
 export const API_BASE_URL = useRemoteBackend
   ? `${remoteBackend}api/`
@@ -49,7 +62,3 @@ export const DOWNLOAD_BASE_URL = useRemoteBackend
 export const ACCESS_TOKEN_NAME = 'x-auth-token';
 
 export const FILE_BASE_URL = useRemoteBackend ? remoteFiles : 'http://localhost:8888/';
-
-//  console.log(
-//    '🚀 Welcome to IDURAR ERP CRM! Did you know that we also offer commercial customization services? Contact us at hello@idurarapp.com for more information.'
-//  );
