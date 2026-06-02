@@ -25,7 +25,16 @@ Cria um cluster e copia a connection string para `DATABASE`.
    - `VITE_APP_URL` = `https://<teu-site>.vercel.app/` (opcional)
 4. Redeploy
 
-Não uses a pasta `backend` como root na Vercel — o API é só no Render.
+### Projeto `gestpr-backend` na Vercel (opcional)
+
+- **Root Directory**: `backend`
+- O `backend/vercel.json` envia todo o tráfego para `api/index.js` (com `registerAliases` + MongoDB)
+- Variáveis obrigatórias: `DATABASE`, `JWT_SECRET`, `NODE_ENV=production`, `PUBLIC_SERVER_FILE`, `PUBLIC_APP_URL`
+- **Limitação**: geração de PDF (`html-pdf`) pode falhar na Vercel; para PDFs estáveis, usa Render
+
+### Projeto frontend na Vercel
+
+Não uses a pasta `backend` como root no projeto do frontend.
 
 ## 4. Local
 

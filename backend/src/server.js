@@ -1,4 +1,4 @@
-require('module-alias/register');
+require('./registerAliases');
 
 // Make sure we are running node 20+
 const [major] = process.versions.node.split('.').map(parseFloat);
