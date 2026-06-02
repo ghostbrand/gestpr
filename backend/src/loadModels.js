@@ -1,3 +1,6 @@
+// Dependências usadas via require() dinâmico nos models — força o bundle da Vercel a incluí-las
+require('mongoose-autopopulate');
+
 const { globSync } = require('glob');
 const path = require('path');
 

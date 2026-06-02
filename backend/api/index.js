@@ -1,5 +1,8 @@
 require('dotenv').config();
 
+// Garante deps no bundle serverless antes de carregar models
+require('mongoose-autopopulate');
+
 const serverless = require('serverless-http');
 
 let handler;

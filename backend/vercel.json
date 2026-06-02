@@ -10,7 +10,7 @@
     "api/index.js": {
       "maxDuration": 60,
       "memory": 1024,
-      "includeFiles": "src/**"
+      "includeFiles": "{src/**,node_modules/mongoose-autopopulate/**,node_modules/mongoose/**,node_modules/mongodb/**,node_modules/bson/**}"
     },
     "api/ping.js": {
       "maxDuration": 10,
