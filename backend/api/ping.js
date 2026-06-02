@@ -1,4 +1,7 @@
+const { CORS_HEADERS } = require('./options');
+
 module.exports = (req, res) => {
+  Object.entries(CORS_HEADERS).forEach(([key, value]) => res.setHeader(key, value));
   res.status(200).json({
     ok: true,
     service: 'gestpr-api',

@@ -24,6 +24,11 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/api/:path*",
+      "has": [{ "type": "header", "key": "access-control-request-method" }],
+      "destination": "/api/options"
+    },
     { "source": "/api/ping", "destination": "/api/ping" },
     { "source": "/(.*)", "destination": "/api" }
   ],
@@ -32,6 +37,14 @@
       "maxDuration": 60,
       "memory": 1024,
       "includeFiles": "{src/**,package.json,package-lock.json}"
+    },
+    "api/options.js": {
+      "maxDuration": 10,
+      "memory": 128
+    },
+    "api/ping.js": {
+      "maxDuration": 10,
+      "memory": 128
     }
   }
 }
