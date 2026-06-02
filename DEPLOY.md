@@ -39,6 +39,8 @@ Cria um cluster e copia a connection string para `DATABASE`.
 
 Não uses a pasta `backend` como root no projeto do frontend.
 
+**Nota:** O `.vercelignore` na raiz não deve listar `backend/` — isso apaga o API no deploy e o `npm install` falha com código 254.
+
 ## 4. Local
 
 ```bash
