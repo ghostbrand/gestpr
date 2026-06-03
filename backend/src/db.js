@@ -14,10 +14,12 @@ function connectDatabase() {
   }
 
   if (!globalCache.promise) {
+    const isVercel = Boolean(process.env.VERCEL);
     globalCache.promise = mongoose
       .connect(process.env.DATABASE, {
-        serverSelectionTimeoutMS: 30_000,
-        connectTimeoutMS: 30_000,
+        serverSelectionTimeoutMS: isVercel ? 10_000 : 60_000,
+        connectTimeoutMS: isVercel ? 10_000 : 60_000,
+        maxPoolSize: isVercel ? 5 : 10,
       })
       .then(() => mongoose.connection)
       .catch((error) => {

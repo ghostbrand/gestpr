@@ -1,27 +1,30 @@
 require('dotenv').config();
 
-require('mongoose-autopopulate');
-require('../src/models/registerAll');
-
 const serverless = require('serverless-http');
 
 let handler;
 let initError;
+let initPromise;
 
-async function getHandler() {
-  if (initError) throw initError;
-  if (!handler) {
-    try {
-      const { connectDatabase } = require('../src/db');
-      await connectDatabase();
-      const app = require('../src/app');
-      handler = serverless(app);
-    } catch (error) {
-      initError = error;
-      throw error;
-    }
-  }
-  return handler;
+function init() {
+  if (initPromise) return initPromise;
+
+  initPromise = (async () => {
+    require('mongoose-autopopulate');
+    require('../src/models/registerAll');
+
+    const { connectDatabase } = require('../src/db');
+    await connectDatabase();
+
+    const app = require('../src/app');
+    handler = serverless(app);
+  })().catch((error) => {
+    initError = error;
+    initPromise = null;
+    throw error;
+  });
+
+  return initPromise;
 }
 
 module.exports = async (req, res) => {
@@ -33,14 +36,17 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const fn = await getHandler();
-    return await fn(req, res);
+    await init();
+    return handler(req, res);
   } catch (error) {
     console.error('API error:', error.message);
     if (!res.headersSent) {
       res.status(500).json({
         success: false,
         message: error.message,
+        hint: error.message.includes('DATABASE')
+          ? 'Add DATABASE in Vercel Environment Variables'
+          : 'Check /api/health for MongoDB status',
       });
     }
   }
