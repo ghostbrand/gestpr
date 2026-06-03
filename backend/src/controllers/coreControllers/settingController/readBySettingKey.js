@@ -1,8 +1,7 @@
-const mongoose = require('mongoose');
-
-const Model = mongoose.model('Setting');
+const { getModel } = require('../../../models/getModel');
 
 const readBySettingKey = async (req, res) => {
+  const Model = getModel('Setting');
   // Find document by id
   const settingKey = req.params.settingKey || undefined;
 

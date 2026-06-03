@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const Model = mongoose.model('Setting');
+const { getModel } = require('../../../models/getModel');
 
 const listAll = async (req, res) => {
+  const Model = getModel('Setting');
   const sort = parseInt(req.query.sort) || 'desc';
 
   //  Query the database for a list of all results

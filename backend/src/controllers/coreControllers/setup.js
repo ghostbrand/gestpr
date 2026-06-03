@@ -6,13 +6,15 @@ const { generate: uniqueId } = require('shortid');
 
 const mongoose = require('mongoose');
 
-const setup = async (req, res) => {
-  const Admin = mongoose.model('Admin');
-  const AdminPassword = mongoose.model('AdminPassword');
-  const Setting = mongoose.model('Setting');
+const { getModel } = require('../../models/getModel');
 
-  const PaymentMode = mongoose.model('PaymentMode');
-  const Taxes = mongoose.model('Taxes');
+const setup = async (req, res) => {
+  const Admin = getModel('Admin');
+  const AdminPassword = getModel('AdminPassword');
+  const Setting = getModel('Setting');
+
+  const PaymentMode = getModel('PaymentMode');
+  const Taxes = getModel('Taxes');
 
   const newAdminPassword = new AdminPassword();
 

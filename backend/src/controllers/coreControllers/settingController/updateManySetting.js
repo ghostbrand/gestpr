@@ -1,8 +1,7 @@
-const mongoose = require('mongoose');
-
-const Model = mongoose.model('Setting');
+const { getModel } = require('../../../models/getModel');
 
 const updateManySetting = async (req, res) => {
+  const Model = getModel('Setting');
   let settingsHasError = false;
   const updateDataArray = [];
   const { settings } = req.body;

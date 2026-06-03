@@ -1,8 +1,7 @@
-const mongoose = require('mongoose');
-
-const Model = mongoose.model('Setting');
+const { getModel } = require('../../../models/getModel');
 
 const updateBySettingKey = async (req, res) => {
+  const Model = getModel('Setting');
   const settingKey = req.params.settingKey || undefined;
 
   if (!settingKey) {

@@ -1,10 +1,8 @@
-const mongoose = require('mongoose');
-
-const Model = mongoose.model('Setting');
+const { getModel } = require('../../models/getModel');
 
 const listAllSettings = async () => {
   try {
-    //  Query the database for a list of all results
+    const Model = getModel('Setting');
     const result = await Model.find({
       removed: false,
     }).exec();
@@ -14,7 +12,8 @@ const listAllSettings = async () => {
     } else {
       return [];
     }
-  } catch {
+  } catch (error) {
+    console.error('listAllSettings error:', error.message);
     return [];
   }
 };

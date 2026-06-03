@@ -1,6 +1,4 @@
-const mongoose = require('mongoose');
-
-const Model = mongoose.model('Setting');
+const { getModel } = require('../../models/getModel');
 
 const increaseBySettingKey = async ({ settingKey }) => {
   try {
@@ -8,24 +6,17 @@ const increaseBySettingKey = async ({ settingKey }) => {
       return null;
     }
 
+    const Model = getModel('Setting');
     const result = await Model.findOneAndUpdate(
       { settingKey },
+      { $inc: { settingValue: 1 } },
       {
-        $inc: { settingValue: 1 },
-      },
-      {
-        new: true, // return the new result instead of the old one
+        new: true,
         runValidators: true,
       }
     ).exec();
 
-    // If no results found, return document not found
-    if (!result) {
-      return null;
-    } else {
-      // Return success resposne
-      return result;
-    }
+    return result || null;
   } catch {
     return null;
   }
