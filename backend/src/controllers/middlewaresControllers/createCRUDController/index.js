@@ -1,6 +1,5 @@
 const { modelsFiles } = require('../../../models/utils');
-
-const mongoose = require('mongoose');
+const { getModel } = require('../../../models/getModel');
 
 const create = require('./create');
 const read = require('./read');
@@ -17,7 +16,7 @@ const createCRUDController = (modelName) => {
     throw new Error(`Model ${modelName} does not exist`);
   }
 
-  const Model = mongoose.model(modelName);
+  const Model = getModel(modelName);
   let crudMethods = {
     create: (req, res) => create(Model, req, res),
     read: (req, res) => read(Model, req, res),
