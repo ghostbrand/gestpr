@@ -1,12 +1,10 @@
 const Joi = require('joi');
-
-const mongoose = require('mongoose');
-
+const { getModel } = require('../../../models/getModel');
 const authUser = require('./authUser');
 
 const login = async (req, res, { userModel }) => {
-  const UserPasswordModel = mongoose.model(userModel + 'Password');
-  const UserModel = mongoose.model(userModel);
+  const UserPasswordModel = getModel(userModel + 'Password');
+  const UserModel = getModel(userModel);
   const { email, password } = req.body;
 
   // validate

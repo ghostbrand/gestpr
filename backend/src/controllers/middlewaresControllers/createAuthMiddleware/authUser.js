@@ -2,6 +2,22 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const authUser = async (req, res, { user, databasePassword, password, UserPasswordModel }) => {
+  if (!databasePassword) {
+    return res.status(403).json({
+      success: false,
+      result: null,
+      message: 'Invalid credentials.',
+    });
+  }
+
+  if (!process.env.JWT_SECRET) {
+    return res.status(500).json({
+      success: false,
+      result: null,
+      message: 'JWT_SECRET is not configured on the server.',
+    });
+  }
+
   const isMatch = await bcrypt.compare(databasePassword.salt + password, databasePassword.password);
 
   if (!isMatch)

@@ -4,14 +4,14 @@ function getAllowedOrigin(origin) {
   const allowed = [
     process.env.PUBLIC_APP_URL?.replace(/\/$/, ''),
     'https://gestpr-app.vercel.app',
+    'https://gestpr-frontend.vercel.app',
     'http://localhost:3000',
     'http://localhost:5173',
   ].filter(Boolean);
 
   if (allowed.includes(origin)) return origin;
 
-  // Preview deployments Vercel: gestpr-app-xxx.vercel.app
-  if (/^https:\/\/gestpr-app(-[a-z0-9-]+)?\.vercel\.app$/i.test(origin)) {
+  if (/^https:\/\/gestpr-(app|frontend)(-[a-z0-9-]+)?\.vercel\.app$/i.test(origin)) {
     return origin;
   }
 
