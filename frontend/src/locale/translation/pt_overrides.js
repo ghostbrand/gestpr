@@ -316,6 +316,8 @@ const ptOverrides = {
   admin_user_add: 'Novo utilizador',
   admin_user_edit: 'Editar utilizador',
   admin_user_delete_confirm: 'Remover este utilizador? Deixará de conseguir iniciar sessão.',
+  admin_user_password_email_hint:
+    'A palavra-passe será gerada automaticamente e enviada para este e-mail.',
   access_level: 'Nível de acesso',
   role_owner: 'Proprietário — acesso total e gestão de equipa',
   role_manager: 'Gestor — operações e utilizadores (perfil equipa só “Colaborador”)',

@@ -18,12 +18,12 @@
     "api/[...path].js": {
       "maxDuration": 60,
       "memory": 1024,
-      "includeFiles": "src/models/**,src/pdf/**,src/public/**,src/controllers/**,src/middlewares/**,src/handlers/**,src/locale/**,src/settings/**,src/utils/**"
+      "includeFiles": "src/models/**,src/pdf/**,src/public/**,src/controllers/**,src/middlewares/**,src/handlers/**,src/locale/**,src/settings/**,src/utils/**,src/emailTemplate/**"
     },
     "api/index.js": {
       "maxDuration": 60,
       "memory": 1024,
-      "includeFiles": "src/models/**,src/pdf/**,src/public/**,src/controllers/**,src/middlewares/**,src/handlers/**,src/locale/**,src/settings/**,src/utils/**"
+      "includeFiles": "src/models/**,src/pdf/**,src/public/**,src/controllers/**,src/middlewares/**,src/handlers/**,src/locale/**,src/settings/**,src/utils/**,src/emailTemplate/**"
     },
     "api/files.js": {
       "maxDuration": 15,

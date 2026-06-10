@@ -141,7 +141,6 @@ export default function AdminUsers() {
           `${API_BASE_URL}admin/directory/create`,
           {
             email: values.email,
-            password: values.password,
             name: values.name,
             surname: values.surname,
             role: values.role,
@@ -269,15 +268,9 @@ export default function AdminUsers() {
                 name="email"
                 label={translate('email')}
                 rules={[{ required: true, type: 'email' }]}
+                extra={translate('admin_user_password_email_hint')}
               >
                 <Input />
-              </Form.Item>
-              <Form.Item
-                name="password"
-                label={translate('password')}
-                rules={[{ required: true, min: 6, message: translate('password_min_6') }]}
-              >
-                <Input.Password />
               </Form.Item>
             </>
           )}

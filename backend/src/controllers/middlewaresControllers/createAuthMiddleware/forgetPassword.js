@@ -31,7 +31,8 @@ const forgetPassword = async (req, res, { userModel }) => {
     });
   }
 
-  const user = await User.findOne({ email: email, removed: false });
+  const normalizedEmail = String(email).trim().toLowerCase();
+  const user = await User.findOne({ email: normalizedEmail, removed: false });
   if (!user) {
     return res.status(404).json({
       success: false,
@@ -70,19 +71,29 @@ const forgetPassword = async (req, res, { userModel }) => {
 
   const link = url + '/resetpassword/' + user._id + '/' + resetToken;
 
-  await sendMail({
-    email,
-    name: user.name,
-    link,
-    subject: 'Redefinir palavra-passe — CRIS & FAMA',
-    idurar_app_email,
-    settings,
-  });
+  try {
+    await sendMail({
+      email: normalizedEmail,
+      name: user.name,
+      link,
+      subject: 'Redefinir palavra-passe — GestPR',
+      idurar_app_email,
+      settings,
+    });
+  } catch (mailError) {
+    return res.status(502).json({
+      success: false,
+      result: null,
+      message:
+        'Não foi possível enviar o e-mail. Verifique as definições de e-mail (SMTP ou Resend) e tente novamente.',
+      error: mailError.message,
+    });
+  }
 
   return res.status(200).json({
     success: true,
     result: null,
-    message: 'Consulte a sua caixa de e-mail para redefinir a palavra-passe.',
+    message: 'Enviámos um e-mail com o link para redefinir a palavra-passe. Verifique também a pasta de spam.',
   });
 };
 

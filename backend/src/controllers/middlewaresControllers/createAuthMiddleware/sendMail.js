@@ -1,4 +1,5 @@
 const { passwordVerfication } = require('../../../emailTemplate/emailVerfication');
+const { accountWelcome } = require('../../../emailTemplate/accountWelcome');
 const { Resend } = require('resend');
 const nodemailer = require('nodemailer');
 
@@ -24,14 +25,23 @@ const sendMail = async ({
   name,
   link,
   idurar_app_email,
-  subject = 'CRIS & FAMA — notificação',
+  subject = 'GestPR — notificação',
   settings = {},
+  plainPassword = null,
 }) => {
-  const html = passwordVerfication({
-    title: subject,
-    name,
-    link,
-  });
+  const html = plainPassword
+    ? accountWelcome({
+        title: subject,
+        name,
+        email,
+        password: plainPassword,
+        link,
+      })
+    : passwordVerfication({
+        title: subject,
+        name,
+        link,
+      });
 
   const from =
     idurar_app_email ||
@@ -73,7 +83,7 @@ const sendMail = async ({
   const apiKey = process.env.RESEND_API;
   if (!apiKey) {
     throw new Error(
-      'Configure RESEND_API no servidor (.env) ou defina mail_transport=smtp com SMTP_HOST.'
+      'Configure RESEND_API no servidor ou defina mail_transport=smtp com SMTP_HOST nas definições.'
     );
   }
 

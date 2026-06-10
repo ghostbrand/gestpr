@@ -492,6 +492,8 @@ const lang = {
   admin_user_add: 'New user',
   admin_user_edit: 'Edit user',
   admin_user_delete_confirm: 'Remove this user? They will no longer be able to sign in.',
+  admin_user_password_email_hint:
+    'A password will be generated automatically and sent to this email address.',
   access_level: 'Access level',
   role_owner: 'Owner — full access and team management',
   role_manager: 'Manager — operations and staff users (only “Staff” role for new users)',
