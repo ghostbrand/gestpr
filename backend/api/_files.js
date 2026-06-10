@@ -33,8 +33,14 @@ function contentType(filePath) {
   return MIME[path.extname(filePath).toLowerCase()] || 'application/octet-stream';
 }
 
+function isAllowedPath(absolutePath) {
+  if (isPathInside(absolutePath, ROOT)) return true;
+  if (process.env.VERCEL && absolutePath.startsWith('/tmp/gestpr-')) return true;
+  return false;
+}
+
 function serveFile(absolutePath, res) {
-  if (!isPathInside(absolutePath, ROOT)) {
+  if (!isAllowedPath(absolutePath)) {
     return res.status(400).json({ success: false, message: 'Invalid filepath' });
   }
 

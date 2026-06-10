@@ -1,5 +1,8 @@
+const fs = require('fs');
 const custom = require('../../controllers/pdfController');
 const mongoose = require('mongoose');
+const { downloadTarget } = require('../../utils/pdfPaths');
+const { serveFile } = require('../../../api/_files');
 
 module.exports = downloadPdf = async (req, res, { directory, id }) => {
   try {
@@ -19,17 +22,14 @@ module.exports = downloadPdf = async (req, res, { directory, id }) => {
 
       const fileId = modelName.toLowerCase() + '-' + result._id + '.pdf';
       const folderPath = modelName.toLowerCase();
-      const targetLocation = `src/public/download/${folderPath}/${fileId}`;
+      const targetLocation = downloadTarget(folderPath, fileId);
       await custom.generatePdf(modelName, { filename: folderPath, format: 'A4', targetLocation }, result);
-      return res.download(targetLocation, (error) => {
-        if (error)
-          return res.status(500).json({
-            success: false,
-            result: null,
-            message: "Couldn't find file",
-            error: error.message,
-          });
+      res.setHeader('Content-Disposition', `attachment; filename="${fileId}"`);
+      serveFile(targetLocation, res);
+      res.on('finish', () => {
+        if (process.env.VERCEL) fs.unlink(targetLocation, () => {});
       });
+      return;
     } else {
       return res.status(404).json({
         success: false,

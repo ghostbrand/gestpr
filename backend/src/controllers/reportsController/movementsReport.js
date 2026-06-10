@@ -1,8 +1,9 @@
 const moment = require('moment');
 const mongoose = require('mongoose');
 const fs = require('fs');
-const path = require('path');
 const crypto = require('crypto');
+const { downloadTarget } = require('../../utils/pdfPaths');
+const { serveFile } = require('../../../api/_files');
 
 function getModels() {
   return {
@@ -140,10 +141,8 @@ exports.pdf = async (req, res) => {
     const range = parsePeriod(req.query);
     const data = await fetchMovements(range);
 
-    const dir = path.join('src', 'public', 'download', 'report');
-    await fs.promises.mkdir(dir, { recursive: true });
     const fileName = `movement-${crypto.randomBytes(6).toString('hex')}.pdf`;
-    targetLocation = path.join(dir, fileName);
+    targetLocation = downloadTarget('report', fileName);
 
     const custom = require('../pdfController');
     await custom.generateMovementReportPdf(
@@ -161,12 +160,9 @@ exports.pdf = async (req, res) => {
     );
 
     const downloadName = `relatorio-movimentos-${range.period}.pdf`;
-    res.download(targetLocation, downloadName, (err) => {
-      fs.unlink(targetLocation, () => {});
-      if (err && !res.headersSent) {
-        res.status(500).json({ success: false, message: err.message });
-      }
-    });
+    res.setHeader('Content-Disposition', `attachment; filename="${downloadName}"`);
+    serveFile(targetLocation, res);
+    res.on('finish', () => fs.unlink(targetLocation, () => {}));
   } catch (e) {
     if (targetLocation) {
       fs.unlink(targetLocation, () => {});

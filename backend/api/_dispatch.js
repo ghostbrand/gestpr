@@ -6,7 +6,6 @@ const EXPRESS_ONLY = [
   /\/upload$/,
   /\/email\/test$/,
   /\/profile\/update$/,
-  /\/report\/movements\/pdf$/,
 ];
 
 const PUBLIC_POST = new Set(['/api/forgetpassword', '/api/resetpassword']);
@@ -117,7 +116,10 @@ function resolveHandler(pathname) {
 
   if (root === 'report') {
     const sub = rest.join('/');
-    if (sub === 'movements/pdf') return { expressOnly: true };
+    if (sub === 'movements/pdf') {
+      const controller = require('../src/controllers/reportsController/movementsReport');
+      return { handler: controller.pdf, params: {} };
+    }
     if (sub === 'movements') {
       const controller = require('../src/controllers/reportsController/movementsReport');
       return { handler: controller.list, params: {} };
