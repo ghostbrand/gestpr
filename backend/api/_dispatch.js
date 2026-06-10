@@ -35,18 +35,22 @@ function requireDirectoryAccess(req, res) {
   return false;
 }
 
+const APP_CONTROLLERS = {
+  client: require('../src/controllers/appControllers/clientController'),
+  invoice: require('../src/controllers/appControllers/invoiceController'),
+  payment: require('../src/controllers/appControllers/paymentController'),
+  quote: require('../src/controllers/appControllers/quoteController'),
+  paymentmode: () =>
+    require('../src/controllers/middlewaresControllers/createCRUDController')('PaymentMode'),
+  serviceitem: () =>
+    require('../src/controllers/middlewaresControllers/createCRUDController')('ServiceItem'),
+  taxes: () => require('../src/controllers/middlewaresControllers/createCRUDController')('Taxes'),
+};
+
 function getAppController(entity) {
-  const { routesList } = require('../src/models/utils');
-  const route = routesList.find((r) => r.entity === entity);
-  if (!route) return null;
-
-  const custom = ['clientController', 'invoiceController', 'paymentController', 'quoteController'];
-  if (custom.includes(route.controllerName)) {
-    return require(`../src/controllers/appControllers/${route.controllerName}`);
-  }
-
-  const createCRUDController = require('../src/controllers/middlewaresControllers/createCRUDController');
-  return createCRUDController(route.modelName);
+  const controller = APP_CONTROLLERS[entity];
+  if (!controller) return null;
+  return typeof controller === 'function' ? controller() : controller;
 }
 
 function buildParams(segments, action) {

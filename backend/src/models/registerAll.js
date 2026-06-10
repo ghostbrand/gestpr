@@ -1,7 +1,19 @@
 const mongoose = require('mongoose');
-const path = require('path');
 
 require('mongoose-autopopulate');
+
+// Requires estáticos — path dinâmico não entra no bundle da Vercel
+require('./coreModels/Admin');
+require('./coreModels/AdminPassword');
+require('./coreModels/Setting');
+require('./coreModels/Upload');
+require('./appModels/Client');
+require('./appModels/Invoice');
+require('./appModels/Payment');
+require('./appModels/PaymentMode');
+require('./appModels/Quote');
+require('./appModels/ServiceItem');
+require('./appModels/Taxes');
 
 const MODEL_FILES = [
   'models/coreModels/Admin.js',
@@ -21,13 +33,6 @@ let registered = false;
 
 function registerAllModels() {
   if (registered) return;
-
-  const srcDir = path.join(__dirname, '..');
-
-  for (const file of MODEL_FILES) {
-    require(path.join(srcDir, file));
-  }
-
   registered = true;
 }
 
