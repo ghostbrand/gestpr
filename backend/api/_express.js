@@ -103,6 +103,13 @@ async function handleRequest(req, res) {
     const dispatched = await tryDispatch(req, res);
     if (dispatched) return;
 
+    if (process.env.VERCEL) {
+      return res.status(404).json({
+        success: false,
+        message: `Route not available: ${req.method} ${req.url.split('?')[0]}`,
+      });
+    }
+
     const expressHandler = await getHandler();
     return expressHandler(req, res);
   } catch (error) {

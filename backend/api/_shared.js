@@ -43,7 +43,8 @@ function registerAuthModels() {
 }
 
 function registerAllModels() {
-  require('../src/models/registerAll');
+  const { registerAllModels: register } = require('../src/models/registerAll');
+  register();
 }
 
 function handleOptions(req, res) {

@@ -15,11 +15,23 @@ const MIME = {
   '.pdf': 'application/pdf',
 };
 
+function resolveUploadPath(relativePath) {
+  const bundled = path.join(ROOT, relativePath);
+  if (fs.existsSync(bundled)) return bundled;
+
+  if (process.env.VERCEL && relativePath.startsWith('uploads/')) {
+    const tmpPath = path.join('/tmp', 'gestpr-uploads', relativePath.slice('uploads/'.length));
+    if (fs.existsSync(tmpPath)) return tmpPath;
+  }
+
+  return bundled;
+}
+
 function resolveAbsolutePath(joined) {
   if (!joined || typeof joined !== 'string') return null;
 
   if (joined.startsWith('public/')) {
-    return path.join(ROOT, joined.slice('public/'.length));
+    return resolveUploadPath(joined.slice('public/'.length));
   }
 
   if (joined.startsWith('download/')) {

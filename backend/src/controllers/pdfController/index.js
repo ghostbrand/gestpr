@@ -16,6 +16,53 @@ function getPdfEngine() {
   }
   return pdf;
 }
+
+async function renderHtmlToPdfFile(htmlContent, targetLocation, options = {}) {
+  const format = options.format || 'A4';
+  const landscape = options.orientation === 'landscape';
+
+  if (process.env.VERCEL) {
+    const chromium = require('@sparticuz/chromium');
+    const puppeteer = require('puppeteer-core');
+    const browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
+    });
+
+    try {
+      const page = await browser.newPage();
+      await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+      await page.pdf({
+        path: targetLocation,
+        format,
+        landscape,
+        printBackground: true,
+        margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
+      });
+    } finally {
+      await browser.close();
+    }
+    return;
+  }
+
+  await new Promise((resolve, reject) => {
+    getPdfEngine()
+      .create(htmlContent, {
+        format,
+        orientation: landscape ? 'landscape' : 'portrait',
+        border: options.border || '10mm',
+      })
+      .toFile(targetLocation, function (error) {
+        if (error) {
+          reject(error instanceof Error ? error : new Error(String(error)));
+        } else {
+          resolve();
+        }
+      });
+  });
+}
 const { loadSettings } = require('../../middlewares/settings');
 const useLanguage = require('../../locale/useLanguage');
 const { useMoney, useDate } = require('../../settings');
@@ -79,20 +126,10 @@ exports.generatePdf = async (
     moment: moment,
   });
 
-  await new Promise((resolve, reject) => {
-    getPdfEngine()
-      .create(htmlContent, {
-        format: info.format,
-        orientation: 'portrait',
-        border: '10mm',
-      })
-      .toFile(targetLocation, function (error) {
-        if (error) {
-          reject(error instanceof Error ? error : new Error(String(error)));
-        } else {
-          resolve();
-        }
-      });
+  await renderHtmlToPdfFile(htmlContent, targetLocation, {
+    format: info.format,
+    orientation: 'portrait',
+    border: '10mm',
   });
 };
 
@@ -148,19 +185,9 @@ exports.generateMovementReportPdf = async (
     moment,
   });
 
-  await new Promise((resolve, reject) => {
-    getPdfEngine()
-      .create(htmlContent, {
-        format: info.format || 'A4',
-        orientation: 'landscape',
-        border: '8mm',
-      })
-      .toFile(targetLocation, function (error) {
-        if (error) {
-          reject(error instanceof Error ? error : new Error(String(error)));
-        } else {
-          resolve();
-        }
-      });
+  await renderHtmlToPdfFile(htmlContent, targetLocation, {
+    format: info.format || 'A4',
+    orientation: 'landscape',
+    border: '8mm',
   });
 };
