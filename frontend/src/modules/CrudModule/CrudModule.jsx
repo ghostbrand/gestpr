@@ -49,28 +49,16 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
   const show = isReadBoxOpen || isEditBoxOpen ? { opacity: 1 } : { opacity: 0 };
   return (
     <>
-      <Row style={show} gutter={(24, 24)}>
-        <Col span={10}>
-          <p style={{ marginBottom: '10px' }}>{labels}</p>
-        </Col>
+      <Row style={show} gutter={[24, 24]} className="crud-panel-actions">
         <Col span={14}>
-          <Button
-            onClick={removeItem}
-            type="text"
-            icon={<DeleteOutlined />}
-            size="small"
-            style={{ float: 'right', marginLeft: '5px', marginTop: '10px' }}
-          >
-            {translate('remove')}
-          </Button>
-          <Button
-            onClick={editItem}
-            type="text"
-            icon={<EditOutlined />}
-            size="small"
-            style={{ float: 'right', marginLeft: '0px', marginTop: '10px' }}
-          >
+          <p className="crud-panel-actions__label">{labels}</p>
+        </Col>
+        <Col span={10} className="crud-panel-actions__buttons">
+          <Button onClick={editItem} type="text" icon={<EditOutlined />} size="small">
             {translate('edit')}
+          </Button>
+          <Button onClick={removeItem} type="text" danger icon={<DeleteOutlined />} size="small">
+            {translate('remove')}
           </Button>
         </Col>
 

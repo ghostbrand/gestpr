@@ -195,10 +195,11 @@ export default function DataTable({ config, extra = [] }) {
   };
 
   return (
-    <>
+    <div className="erp-datatable">
       <PageHeader
+        className="erp-datatable__header"
         title={DATATABLE_TITLE}
-        ghost={true}
+        ghost
         onBack={() => window.history.back()}
         backIcon={<ArrowLeftOutlined />}
         extra={[
@@ -218,12 +219,10 @@ export default function DataTable({ config, extra = [] }) {
 
           !disableAdd && <AddNewItem config={config} key="add-new-item" />,
         ]}
-        style={{
-          padding: '20px 0px',
-        }}
-      ></PageHeader>
+      />
 
       <Table
+        className="erp-datatable__table"
         columns={dataTableColumns}
         rowKey={(item) => item._id}
         dataSource={dataSource}
@@ -232,6 +231,6 @@ export default function DataTable({ config, extra = [] }) {
         onChange={handelDataTableLoad}
         scroll={{ x: true }}
       />
-    </>
+    </div>
   );
 }

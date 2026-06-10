@@ -147,7 +147,7 @@
 
 .layoutPadding {
   position: relative;
-  padding: 50px 40px;
+  padding: clamp(20px, 4vw, 36px) clamp(16px, 3.5vw, 32px);
 }
 
 .dashboardSpacing {
@@ -175,7 +175,7 @@
 
 @media only screen and (max-width: 600px) {
   .layoutPadding {
-    padding: 50px 20px;
+    padding: 16px 14px;
   }
 
   .dashboardSpacing {

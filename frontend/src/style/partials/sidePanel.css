@@ -1,9 +1,44 @@
 .sidePanel {
-  border-right: 1px solid #edf0f5;
-  background: #fff;
+  border-right: 1px solid var(--app-border, rgba(99, 102, 241, 0.14));
+  background: var(--app-surface-glass, rgba(255, 255, 255, 0.85));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 4px 0 24px rgba(99, 102, 241, 0.08);
 }
 
 .sidePanelContent {
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   margin-top: 0;
+}
+
+.collapseBoxHeader {
+  padding: 16px 24px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--app-primary-dark, #3730a3);
+  background: rgba(99, 102, 241, 0.06);
+  border-top: 1px solid var(--app-border);
+  border-bottom: 1px solid var(--app-border);
+  transition: background 0.2s ease;
+}
+
+.collapseBoxHeader:hover {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.box {
+  width: 100%;
+  padding: 20px;
+}
+
+.collapseBox {
+  margin-top: -400px;
+  position: relative;
+  background: var(--app-surface-glass);
+  z-index: 1;
 }

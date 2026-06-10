@@ -1,26 +1,23 @@
 import { Col, Divider, Row, Typography } from 'antd';
-import { useSelector } from 'react-redux';
 
 const { Title, Text } = Typography;
 
 export default function SetingsSection({ title, description, children }) {
   return (
-    <Row gutter={[24, 24]}>
+    <Row gutter={[24, 24]} className="setting-section">
       <Col span={24}>
-        <Title level={4}>{title}</Title>
-        <Text type="secondary">{description}</Text>
+        <Title level={4} className="setting-section__title">
+          {title}
+        </Title>
+        <Text type="secondary" className="setting-section__desc">
+          {description}
+        </Text>
       </Col>
 
-      <Col
-        xl={{ span: 18, offset: 2 }}
-        lg={{ span: 24 }}
-        md={{ span: 24 }}
-        sm={{ span: 24 }}
-        xs={{ span: 24 }}
-      >
-        {children}
+      <Col xl={{ span: 18, offset: 2 }} lg={24} md={24} sm={24} xs={24}>
+        <div className="setting-section__form">{children}</div>
       </Col>
-      <Divider />
+      <Divider className="setting-section__divider" />
     </Row>
   );
 }

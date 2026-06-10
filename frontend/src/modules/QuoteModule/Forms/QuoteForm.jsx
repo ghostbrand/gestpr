@@ -241,7 +241,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         )}
       </Form.List>
       <Divider dashed />
-      <div style={{ position: 'relative', width: ' 100%', float: 'right' }}>
+      <div className="invoice-form-footer">
         <Row gutter={[12, -5]}>
           <Col className="gutter-row" span={5}>
             <Form.Item>

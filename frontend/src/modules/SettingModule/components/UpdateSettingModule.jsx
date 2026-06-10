@@ -13,19 +13,12 @@ export default function UpdateSettingModule({
   return (
     <>
       <PageHeader
+        className="erp-datatable__header setting-section__header"
         title={config.SETTINGS_TITLE}
         ghost={false}
-        // extra={[
-        //   <Button key={`${uniqueId()}`} type="primary" disabled icon={<SyncOutlined />}>
-        //     Update
-        //   </Button>,
-        // ]}
-        style={{
-          padding: '20px 0px',
-        }}
-      ></PageHeader>
+      />
 
-      <Divider></Divider>
+      <Divider className="setting-section__divider" />
       <UpdateSettingForm
         config={config}
         withUpload={withUpload}

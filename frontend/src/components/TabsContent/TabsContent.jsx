@@ -1,81 +1,46 @@
-import { Tabs, Row, Col } from 'antd';
+import { Tabs, Row } from 'antd';
 
-const SettingsLayout = ({ children }) => {
-  return (
-    <Col className="gutter-row" order={0}>
-      <div className="whiteBox shadow" style={{ minHeight: '480px' }}>
-        <div className="pad40">{children}</div>
-      </div>
-    </Col>
-  );
-};
+const SettingsPanel = ({ children }) => (
+  <div className="settings-tab-panel glass-card animate-fade-up">{children}</div>
+);
 
-const TopCard = ({ pageTitle }) => {
-  return (
-    <div
-      className="whiteBox shadow"
-      style={{
-        color: '#595959',
-        fontSize: 13,
-        height: '70px',
-        minHeight: 'auto',
-        marginBottom: '24px',
-      }}
-    >
-      <div className="pad20 strong" style={{ textAlign: 'center', justifyContent: 'center' }}>
-        <h2 className="erp-page-title">{pageTitle}</h2>
-      </div>
+const SettingsNav = ({ pageTitle, children }) => (
+  <div className="settings-nav">
+    <div className="settings-nav__header glass-card">
+      <h2 className="erp-page-title">{pageTitle}</h2>
+      <p className="settings-nav__hint">Configuração do sistema</p>
     </div>
-  );
-};
-
-const RightMenu = ({ children, pageTitle }) => {
-  return (
-    <Col
-      className="gutter-row"
-      xs={{ span: 24 }}
-      sm={{ span: 24 }}
-      md={{ span: 7 }}
-      lg={{ span: 6 }}
-      order={1}
-    >
-      <TopCard pageTitle={pageTitle} />
-      <div className="whiteBox shadow">
-        <div className="pad25" style={{ width: '100%', paddingBottom: 0 }}>
-          {children}
-        </div>
-      </div>
-    </Col>
-  );
-};
+    <div className="settings-nav__menu glass-card">{children}</div>
+  </div>
+);
 
 export default function TabsContent({ content, defaultActiveKey, pageTitle }) {
-  const items = content.map((item, index) => {
-    return {
-      key: item.key ? item.key : index + '_' + item.label.replace(/ /g, '_'),
-      label: (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          {item.icon} <span style={{ paddingRight: 30 }}>{item.label}</span>
-        </div>
-      ),
-      children: <SettingsLayout>{item.children}</SettingsLayout>,
-    };
-  });
+  const items = content.map((item, index) => ({
+    key: item.key ? item.key : `${index}_${item.label.replace(/ /g, '_')}`,
+    label: (
+      <span className="settings-tab-label">
+        {item.icon}
+        <span>{item.label}</span>
+      </span>
+    ),
+    children: <SettingsPanel>{item.children}</SettingsPanel>,
+  }));
 
   const renderTabBar = (props, DefaultTabBar) => (
-    <RightMenu pageTitle={pageTitle}>
+    <SettingsNav pageTitle={pageTitle}>
       <DefaultTabBar {...props} />
-    </RightMenu>
+    </SettingsNav>
   );
 
   return (
-    <Row gutter={[24, 24]} className="tabContent">
+    <Row gutter={[24, 24]} className="settings-page tabContent animate-fade-up">
       <Tabs
         tabPosition="right"
         defaultActiveKey={defaultActiveKey}
-        hideAdd={true}
+        hideAdd
         items={items}
         renderTabBar={renderTabBar}
+        className="settings-tabs"
       />
     </Row>
   );

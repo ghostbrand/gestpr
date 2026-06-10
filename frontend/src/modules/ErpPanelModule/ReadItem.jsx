@@ -223,6 +223,7 @@ export default function ReadItem({ config, selectedItem }) {
   return (
     <div className="erp-read-detail">
       <PageHeader
+        className="erp-datatable__header erp-read-detail__header"
         onBack={() => navigate(`/${entity.toLowerCase()}`)}
         title={
           <Space align="center" wrap>
@@ -297,7 +298,6 @@ export default function ReadItem({ config, selectedItem }) {
             </Button>
           </Space>
         }
-        style={{ padding: '12px 0 20px' }}
       />
 
       {summaryCards}
