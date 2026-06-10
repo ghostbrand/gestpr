@@ -99,6 +99,10 @@ async function handleRequest(req, res) {
   }
 
   try {
+    const { tryDispatch } = require('./_dispatch');
+    const dispatched = await tryDispatch(req, res);
+    if (dispatched) return;
+
     const expressHandler = await getHandler();
     return expressHandler(req, res);
   } catch (error) {

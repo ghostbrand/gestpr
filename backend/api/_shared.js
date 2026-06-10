@@ -42,6 +42,10 @@ function registerAuthModels() {
   require('../src/models/coreModels/AdminPassword');
 }
 
+function registerAllModels() {
+  require('../src/models/registerAll');
+}
+
 function handleOptions(req, res) {
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
@@ -50,4 +54,4 @@ function handleOptions(req, res) {
   return res.status(204).end();
 }
 
-module.exports = { readBody, connectDb, registerAuthModels, handleOptions };
+module.exports = { readBody, connectDb, registerAuthModels, registerAllModels, handleOptions };
