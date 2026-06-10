@@ -1,6 +1,13 @@
 const pug = require('pug');
 const fs = require('fs');
+const path = require('path');
 const moment = require('moment');
+
+const PDF_DIR = path.join(__dirname, '../../pdf');
+
+function pdfTemplate(modelName) {
+  return path.join(PDF_DIR, `${modelName}.pug`);
+}
 let pdf;
 
 function getPdfEngine() {
@@ -63,7 +70,7 @@ exports.generatePdf = async (
 
   settings.public_server_file = process.env.PUBLIC_SERVER_FILE;
 
-  const htmlContent = pug.renderFile('src/pdf/' + modelName + '.pug', {
+  const htmlContent = pug.renderFile(pdfTemplate(modelName), {
     model: result,
     settings,
     translate,
@@ -132,7 +139,7 @@ exports.generateMovementReportPdf = async (
 
   settings.public_server_file = process.env.PUBLIC_SERVER_FILE;
 
-  const htmlContent = pug.renderFile('src/pdf/MovementReport.pug', {
+  const htmlContent = pug.renderFile(path.join(PDF_DIR, 'MovementReport.pug'), {
     ...payload,
     settings,
     translate,
