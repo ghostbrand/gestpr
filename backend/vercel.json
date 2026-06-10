@@ -10,9 +10,9 @@
     { "source": "/api/ping", "destination": "/api/ping" },
     { "source": "/api/health", "destination": "/api/health" },
     { "source": "/api/login", "destination": "/api/login" },
-    { "source": "/api/(.*)", "destination": "/api?path=$1" },
-    { "source": "/download/:path*", "destination": "/api?path=download/$1" },
-    { "source": "/public/:path*", "destination": "/api?path=public/$1" }
+    { "source": "/download/:path*", "destination": "/api/download?path=download/:path*" },
+    { "source": "/public/:path*", "destination": "/api/files?path=public/:path*" },
+    { "source": "/api/(.*)", "destination": "/api?path=$1" }
   ],
   "functions": {
     "api/[...path].js": {
@@ -21,6 +21,16 @@
       "includeFiles": "src/**"
     },
     "api/index.js": {
+      "maxDuration": 60,
+      "memory": 1024,
+      "includeFiles": "src/**"
+    },
+    "api/files.js": {
+      "maxDuration": 15,
+      "memory": 256,
+      "includeFiles": "src/public/**"
+    },
+    "api/download.js": {
       "maxDuration": 60,
       "memory": 1024,
       "includeFiles": "src/**"
