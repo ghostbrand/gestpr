@@ -3,10 +3,20 @@ const custom = require('../../controllers/pdfController');
 const mongoose = require('mongoose');
 const { downloadTarget } = require('../../utils/pdfPaths');
 const { serveFile } = require('../../../api/_files');
+const { supportsPdf, modelNameFromDirectory } = require('../../utils/pdfEntities');
 
 module.exports = downloadPdf = async (req, res, { directory, id }) => {
   try {
-    const modelName = directory.slice(0, 1).toUpperCase() + directory.slice(1);
+    const modelName = modelNameFromDirectory(directory);
+
+    if (!supportsPdf(directory)) {
+      return res.status(404).json({
+        success: false,
+        result: null,
+        message: 'PDF não disponível para este tipo de registo.',
+      });
+    }
+
     if (mongoose.models[modelName]) {
       const Model = mongoose.model(modelName);
       const result = await Model.findOne({

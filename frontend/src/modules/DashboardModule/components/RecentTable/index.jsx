@@ -9,6 +9,7 @@ import { erp } from '@/redux/erp/actions';
 import useLanguage from '@/locale/useLanguage';
 import { useNavigate } from 'react-router-dom';
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
+import { entitySupportsPdf } from '@/config/pdfConfig';
 
 export default function RecentTable({ ...props }) {
   const translate = useLanguage();
@@ -25,11 +26,15 @@ export default function RecentTable({ ...props }) {
       key: 'edit',
       icon: <EditOutlined />,
     },
-    {
-      label: translate('Download'),
-      key: 'download',
-      icon: <FilePdfOutlined />,
-    },
+    ...(entitySupportsPdf(entity)
+      ? [
+          {
+            label: translate('Download'),
+            key: 'download',
+            icon: <FilePdfOutlined />,
+          },
+        ]
+      : []),
   ];
 
   const navigate = useNavigate();

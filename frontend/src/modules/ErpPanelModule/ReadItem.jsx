@@ -32,6 +32,7 @@ import useLanguage from '@/locale/useLanguage';
 import { erp } from '@/redux/erp/actions';
 import { selectCurrentItem } from '@/redux/erp/selectors';
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
+import { entitySupportsPdf } from '@/config/pdfConfig';
 import { useMoney, useDate } from '@/settings';
 import useMail from '@/hooks/useMail';
 import { useNavigate } from 'react-router-dom';
@@ -248,11 +249,13 @@ export default function ReadItem({ config, selectedItem }) {
             >
               {translate('Close')}
             </Button>
-            <Tooltip title={translate('download_pdf')}>
-              <Button key="pdf" onClick={openPdf} icon={<FilePdfOutlined />}>
-                PDF
-              </Button>
-            </Tooltip>
+            {entitySupportsPdf(entity) ? (
+              <Tooltip title={translate('download_pdf')}>
+                <Button key="pdf" onClick={openPdf} icon={<FilePdfOutlined />}>
+                  PDF
+                </Button>
+              </Tooltip>
+            ) : null}
             {showMail ? (
               <Tooltip title={translate('Send by Email')}>
                 <Button

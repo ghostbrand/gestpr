@@ -67,7 +67,7 @@ const { loadSettings } = require('../../middlewares/settings');
 const useLanguage = require('../../locale/useLanguage');
 const { useMoney, useDate } = require('../../settings');
 
-const pugFiles = ['invoice', 'offer', 'quote', 'payment'];
+const { supportsPdf } = require('../../utils/pdfEntities');
 
 require('dotenv').config({ path: '.env' });
 require('dotenv').config({ path: '.env.local' });
@@ -82,8 +82,8 @@ exports.generatePdf = async (
     throw new Error('PDF targetLocation is required');
   }
 
-  if (!pugFiles.includes(modelName.toLowerCase())) {
-    throw new Error(`PDF template not registered: ${modelName}`);
+  if (!supportsPdf(modelName)) {
+    throw new Error(`PDF não disponível para: ${modelName}`);
   }
 
   if (fs.existsSync(targetLocation)) {

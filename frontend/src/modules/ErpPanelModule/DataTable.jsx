@@ -22,6 +22,7 @@ import { useErpContext } from '@/context/erp';
 import { useNavigate } from 'react-router-dom';
 
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
+import { entitySupportsPdf } from '@/config/pdfConfig';
 
 function AddNewItem({ config }) {
   const navigate = useNavigate();
@@ -80,11 +81,15 @@ export default function DataTable({ config, extra = [] }) {
       key: 'edit',
       icon: <EditOutlined />,
     },
-    {
-      label: translate('Download'),
-      key: 'download',
-      icon: <FilePdfOutlined />,
-    },
+    ...(entitySupportsPdf(entity)
+      ? [
+          {
+            label: translate('Download'),
+            key: 'download',
+            icon: <FilePdfOutlined />,
+          },
+        ]
+      : []),
     ...extra,
     {
       type: 'divider',
