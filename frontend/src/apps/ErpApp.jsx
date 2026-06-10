@@ -50,7 +50,7 @@ export default function ErpCrmApp() {
 
   if (settingIsloaded)
     return (
-      <Layout hasSider className="erp-app-shell">
+      <Layout hasSider className="erp-app-shell animate-fade-up">
         <Navigation />
 
         {isMobile ? (

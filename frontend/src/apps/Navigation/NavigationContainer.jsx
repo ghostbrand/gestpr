@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Drawer, Layout, Menu, Typography } from 'antd';
+import { Button, Drawer, Layout, Menu } from 'antd';
+import BrandLogo from '@/components/BrandLogo/BrandLogo';
 import { useSelector } from 'react-redux';
 
 import { useAppContext } from '@/context/appContext';
@@ -28,7 +29,6 @@ import {
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
-const { Text } = Typography;
 
 export default function Navigation() {
   const { isMobile } = useResponsive();
@@ -195,24 +195,8 @@ function Sidebar({ collapsible, isMobile = false }) {
       }
       theme={'light'}
     >
-      <div
-        className="logo nav-brand"
-        onClick={() => navigate('/')}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            navigate('/');
-          }
-        }}
-      >
-        <Text strong className="nav-brand__title">
-          CRIS & FAMA
-        </Text>
-        <Text type="secondary" className="nav-brand__subtitle">
-          , Lda.
-        </Text>
+      <div className="logo nav-brand">
+        <BrandLogo size="md" onClick={() => navigate('/')} />
       </div>
       <Menu
         className="erp-main-menu"
@@ -254,7 +238,7 @@ function MobileSidebar() {
         aria-label="Menu"
         style={{ marginLeft: 'clamp(8px, 3vw, 24px)' }}
       >
-        <MenuOutlined style={{ fontSize: 20, color: 'var(--app-primary-dark, #082f47)' }} />
+        <MenuOutlined style={{ fontSize: 20, color: 'var(--app-primary, #6366f1)' }} />
       </Button>
       <Drawer
         rootClassName="erp-mobile-nav-drawer"

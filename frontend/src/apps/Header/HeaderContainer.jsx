@@ -81,8 +81,8 @@ export default function HeaderContent() {
             currentAdmin?.photo ? `${FILE_BASE_URL || ''}${currentAdmin.photo}` : undefined
           }
           style={{
-            color: '#0c4a6e',
-            background: currentAdmin?.photo ? 'transparent' : 'linear-gradient(135deg, #e0f2fe 0%, #fef9c3 100%)',
+            color: '#6366f1',
+            background: currentAdmin?.photo ? 'transparent' : 'linear-gradient(135deg, #e0e7ff 0%, #cffafe 100%)',
             fontWeight: 700,
           }}
         >
@@ -161,8 +161,8 @@ export default function HeaderContent() {
             currentAdmin?.photo ? `${FILE_BASE_URL || ''}${currentAdmin.photo}` : undefined
           }
             style={{
-              color: '#0c4a6e',
-              background: currentAdmin?.photo ? 'transparent' : 'linear-gradient(135deg, #bae6fd 0%, #fde68a 100%)',
+              color: '#6366f1',
+              background: currentAdmin?.photo ? 'transparent' : 'linear-gradient(135deg, #c7d2fe 0%, #a5f3fc 100%)',
               fontWeight: 700,
               cursor: 'pointer',
             }}

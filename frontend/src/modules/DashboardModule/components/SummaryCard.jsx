@@ -1,97 +1,44 @@
-import { Tag, Divider, Row, Col, Spin, Tooltip } from 'antd';
+import { Col, Spin } from 'antd';
+import {
+  FileTextOutlined,
+  FileSyncOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+} from '@ant-design/icons';
 import { useMoney } from '@/settings';
 import { selectMoneyFormat } from '@/redux/settings/selectors';
 import { useSelector } from 'react-redux';
 
-export default function AnalyticSummaryCard({ title, tagColor, data, prefix, isLoading = false }) {
+const ICONS = {
+  invoice: { icon: <FileTextOutlined />, cls: 'stat-card__icon--indigo' },
+  quote: { icon: <FileSyncOutlined />, cls: 'stat-card__icon--cyan' },
+  paid: { icon: <CheckCircleOutlined />, cls: 'stat-card__icon--violet' },
+  unpaid: { icon: <ClockCircleOutlined />, cls: 'stat-card__icon--gold' },
+};
+
+export default function SummaryCard({ title, data, prefix, isLoading = false, variant = 'invoice' }) {
   const { moneyFormatter } = useMoney();
   const money_format_settings = useSelector(selectMoneyFormat);
+  const iconMeta = ICONS[variant] || ICONS.invoice;
+
+  const formatted = moneyFormatter({
+    amount: data || 0,
+    currency_code: money_format_settings?.default_currency_code,
+  });
+
   return (
-    <Col
-      className="gutter-row"
-      xs={{ span: 24 }}
-      sm={{ span: 12 }}
-      md={{ span: 12 }}
-      lg={{ span: 6 }}
-    >
-      <div
-        className="whiteBox shadow"
-        style={{ color: '#595959', fontSize: 13, minHeight: '106px', height: '100%' }}
-      >
-        <div className="pad15 strong" style={{ textAlign: 'center', justifyContent: 'center' }}>
-          <h3
-            style={{
-              color: '#22075e',
-              fontSize: 'large',
-              margin: '5px 0',
-              textTransform: 'capitalize',
-            }}
-          >
-            {title}
-          </h3>
+    <Col className="gutter-row animate-fade-up" xs={24} sm={12} md={12} lg={6}>
+      <div className="glass-card glass-card--stat stat-card">
+        <div className="stat-card__header">
+          <span className="stat-card__title">{title}</span>
+          <div className={`stat-card__icon ${iconMeta.cls}`}>{iconMeta.icon}</div>
         </div>
-        <Divider style={{ padding: 0, margin: 0 }}></Divider>
-        <div className="pad15">
-          <Row gutter={[0, 0]} justify="space-between" wrap={false}>
-            <Col className="gutter-row" flex="85px" style={{ textAlign: 'left' }}>
-              <div className="left" style={{ whiteSpace: 'nowrap' }}>
-                {prefix}
-              </div>
-            </Col>
-            <Divider
-              style={{
-                height: '100%',
-                padding: '10px 0',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              type="vertical"
-            ></Divider>
-            <Col
-              className="gutter-row"
-              flex="auto"
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {isLoading ? (
-                <Spin />
-              ) : (
-                <Tooltip
-                  title={data}
-                  style={{
-                    direction: 'ltr',
-                  }}
-                >
-                  <Tag
-                    color={tagColor}
-                    style={{
-                      margin: '0 auto',
-                      justifyContent: 'center',
-                      maxWidth: '110px',
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap',
-                      textOverflow: 'ellipsis',
-                      direction: 'ltr',
-                    }}
-                  >
-                    {data
-                      ? moneyFormatter({
-                          amount: data,
-                          currency_code: money_format_settings?.default_currency_code,
-                        })
-                      : moneyFormatter({
-                          amount: 0,
-                          currency_code: money_format_settings?.default_currency_code,
-                        })}
-                  </Tag>
-                </Tooltip>
-              )}
-            </Col>
-          </Row>
-        </div>
+        <div className="stat-card__prefix">{prefix}</div>
+        {isLoading ? (
+          <Spin />
+        ) : (
+          <div className="stat-card__value">{formatted}</div>
+        )}
       </div>
     </Col>
   );

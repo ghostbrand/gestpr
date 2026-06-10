@@ -2,92 +2,57 @@ import { useMemo } from 'react';
 import { Col, Progress, Spin } from 'antd';
 import useLanguage from '@/locale/useLanguage';
 
-const colours = {
-  draft: '#595959',
-  sent: '#1890ff',
-  pending: '#1890ff',
-  unpaid: '#ffa940',
-  overdue: '#ff4d4f',
-  partially: '#13c2c2',
-  paid: '#95de64',
-  declined: '#ff4d4f',
-  accepted: '#95de64',
-  cyan: '#13c2c2',
-  purple: '#722ed1',
-  expired: '#614700',
+const STATUS_COLORS = {
+  draft: '#94a3b8',
+  sent: '#6366f1',
+  pending: '#06b6d4',
+  unpaid: '#f59e0b',
+  overdue: '#f43f5e',
+  partially: '#14b8a6',
+  paid: '#10b981',
+  declined: '#ef4444',
+  accepted: '#22c55e',
+  expired: '#a16207',
 };
 
 const defaultStatistics = [
-  {
-    tag: 'draft',
-    value: 0,
-  },
-  {
-    tag: 'pending',
-    value: 0,
-  },
-  {
-    tag: 'sent',
-    value: 0,
-  },
-  {
-    tag: 'accepted',
-    value: 0,
-  },
-  {
-    tag: 'declined',
-    value: 0,
-  },
-  {
-    tag: 'expired',
-    value: 0,
-  },
+  { tag: 'draft', value: 0 },
+  { tag: 'pending', value: 0 },
+  { tag: 'sent', value: 0 },
+  { tag: 'accepted', value: 0 },
+  { tag: 'declined', value: 0 },
+  { tag: 'expired', value: 0 },
 ];
 
 const defaultInvoiceStatistics = [
-  {
-    tag: 'draft',
-    value: 0,
-  },
-  {
-    tag: 'pending',
-    value: 0,
-  },
-  {
-    tag: 'overdue',
-    value: 0,
-  },
-  {
-    tag: 'paid',
-    value: 0,
-  },
-  {
-    tag: 'unpaid',
-    value: 0,
-  },
-  {
-    tag: 'partially',
-    value: 0,
-  },
+  { tag: 'draft', value: 0 },
+  { tag: 'pending', value: 0 },
+  { tag: 'overdue', value: 0 },
+  { tag: 'paid', value: 0 },
+  { tag: 'unpaid', value: 0 },
+  { tag: 'partially', value: 0 },
 ];
 
-const PreviewState = ({ tag, value }) => {
+function PreviewRow({ tag, value }) {
   const translate = useLanguage();
+  const color = STATUS_COLORS[tag] || '#6366f1';
+
   return (
-    <div style={{ color: '#595959', marginBottom: 5 }}>
-      <div className="left alignLeft capitalize">{translate(tag)}</div>
-      <div className="right alignRight">{value} %</div>
+    <div className="preview-row">
+      <div className="preview-row__header">
+        <span>{translate(tag)}</span>
+        <span className="preview-row__pct">{value}%</span>
+      </div>
       <Progress
         percent={value}
         showInfo={false}
-        strokeColor={{
-          '0%': '#333',
-          '100%': '#333',
-        }}
+        strokeColor={{ from: color, to: color }}
+        trailColor="rgba(99, 102, 241, 0.08)"
+        size="small"
       />
     </div>
   );
-};
+}
 
 export default function PreviewCard({
   title = 'Preview',
@@ -96,61 +61,27 @@ export default function PreviewCard({
   entity = 'invoice',
 }) {
   const statisticsMap = useMemo(() => {
-    if (entity === 'invoice') {
-      return defaultInvoiceStatistics.map((defaultStat) => {
-        const matchedStat = Array.isArray(statistics)
-          ? statistics.find((stat) => stat.tag === defaultStat.tag)
-          : null;
-        return matchedStat || defaultStat;
-      });
-    } else {
-      return defaultStatistics.map((defaultStat) => {
-        const matchedStat = Array.isArray(statistics)
-          ? statistics.find((stat) => stat.tag === defaultStat.tag)
-          : null;
-        return matchedStat || defaultStat;
-      });
-    }
+    const defaults = entity === 'invoice' ? defaultInvoiceStatistics : defaultStatistics;
+    return defaults.map((defaultStat) => {
+      const matched = Array.isArray(statistics)
+        ? statistics.find((stat) => stat.tag === defaultStat.tag)
+        : null;
+      return matched || defaultStat;
+    });
   }, [statistics, entity]);
 
-  const customSort = (a, b) => {
-    const colorOrder = Object.values(colours);
-    const indexA = colorOrder.indexOf(a.props.color);
-    const indexB = colorOrder.indexOf(b.props.color);
-    return indexA - indexB;
-  };
   return (
-    <Col
-      className="gutter-row"
-      xs={{ span: 24 }}
-      sm={{ span: 24 }}
-      md={{ span: 12 }}
-      lg={{ span: 12 }}
-    >
-      <div className="pad20">
-        <h3
-          style={{
-            color: '#22075e',
-            fontSize: 'large',
-            marginBottom: 40,
-            marginTop: 0,
-          }}
-        >
-          {title}
-        </h3>
-        {isLoading ? (
-          <div style={{ textAlign: 'center' }}>
-            <Spin />
-          </div>
-        ) : (
-          statisticsMap
-            ?.map((status, index) => (
-              <PreviewState key={index} tag={status.tag} value={status?.value} />
-              // sort by colours
-            ))
-            .sort(customSort)
-        )}
-      </div>
+    <Col className="gutter-row" xs={24} sm={24} md={12} lg={12}>
+      <h3 className="section-title">{title}</h3>
+      {isLoading ? (
+        <div style={{ textAlign: 'center', padding: 24 }}>
+          <Spin />
+        </div>
+      ) : (
+        statisticsMap.map((status, index) => (
+          <PreviewRow key={index} tag={status.tag} value={status?.value} />
+        ))
+      )}
     </Col>
   );
 }

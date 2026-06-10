@@ -1,14 +1,16 @@
-import React from 'react';
 import { Spin } from 'antd';
+import BrandLogo from '@/components/BrandLogo/BrandLogo';
 
-import { LoadingOutlined } from '@ant-design/icons';
-
-const PageLoader = () => {
-  const antIcon = <LoadingOutlined style={{ fontSize: 64 }} spin />;
+export default function PageLoader() {
   return (
-    <div className="centerAbsolute">
-      <Spin indicator={antIcon}></Spin>
+    <div className="page-loader">
+      <div className="page-loader__orb page-loader__orb--1" />
+      <div className="page-loader__orb page-loader__orb--2" />
+      <div className="page-loader__content animate-scale-in">
+        <BrandLogo size="lg" showSubtitle />
+        <Spin size="large" className="page-loader__spin" />
+        <span className="page-loader__label">A carregar…</span>
+      </div>
     </div>
   );
-};
-export default PageLoader;
+}

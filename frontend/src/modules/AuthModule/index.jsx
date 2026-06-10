@@ -1,6 +1,7 @@
 import useLanguage from '@/locale/useLanguage';
+import BrandLogo from '@/components/BrandLogo/BrandLogo';
 
-import { Layout, Col, Divider, Typography } from 'antd';
+import { Layout, Col, Typography } from 'antd';
 
 import AuthLayout from '@/layout/AuthLayout';
 import SideContent from './SideContent';
@@ -13,10 +14,11 @@ const AuthModule = ({ authContent, AUTH_TITLE, isForRegistre = false }) => {
   return (
     <AuthLayout sideContent={<SideContent />}>
       <Content
+        className="auth-form-card animate-fade-up stagger-2"
         style={{
           padding: isForRegistre
-            ? 'clamp(24px, 6vw, 40px) clamp(16px, 4vw, 30px) 30px'
-            : 'clamp(48px, 12vw, 100px) clamp(16px, 4vw, 30px) 30px',
+            ? 'clamp(24px, 6vw, 40px) clamp(20px, 4vw, 36px) 30px'
+            : 'clamp(48px, 12vw, 100px) clamp(20px, 4vw, 36px) 30px',
           maxWidth: 'min(440px, 100%)',
           margin: '0 auto',
           width: '100%',
@@ -24,19 +26,16 @@ const AuthModule = ({ authContent, AUTH_TITLE, isForRegistre = false }) => {
         }}
       >
         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 0 }} span={0}>
-          <div className="auth-brand-mark" style={{ margin: '0 auto 20px', textAlign: 'center' }}>
-            <Text strong className="nav-brand__title" style={{ display: 'block' }}>
-              CRIS & FAMA
-            </Text>
-            <Text type="secondary" className="nav-brand__subtitle">
-              , Lda.
-            </Text>
+          <div style={{ margin: '0 auto 24px', display: 'flex', justifyContent: 'center' }}>
+            <BrandLogo size="md" />
           </div>
-          <div className="space10" />
         </Col>
-        <Title level={1}>{translate(AUTH_TITLE)}</Title>
-
-        <Divider />
+        <Title level={1} style={{ marginBottom: 8 }}>
+          {translate(AUTH_TITLE)}
+        </Title>
+        <Text type="secondary" style={{ display: 'block', marginBottom: 28, fontSize: 15 }}>
+          CRIS & FAMA, Lda.
+        </Text>
         <div className="site-layout-content">{authContent}</div>
       </Content>
     </AuthLayout>
