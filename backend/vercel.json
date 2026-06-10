@@ -33,7 +33,7 @@
     "api/download.js": {
       "maxDuration": 60,
       "memory": 1024,
-      "includeFiles": "src/**,src/pdf/**,src/public/**"
+      "includeFiles": "src/models/**,src/pdf/**,src/public/**,src/controllers/**,src/middlewares/**,src/handlers/**,src/locale/**,src/settings/**,src/utils/**"
     },
     "api/login.js": {
       "maxDuration": 30,
