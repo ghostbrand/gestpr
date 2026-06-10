@@ -1,7 +1,14 @@
 const pug = require('pug');
 const fs = require('fs');
 const moment = require('moment');
-let pdf = require('html-pdf');
+let pdf;
+
+function getPdfEngine() {
+  if (!pdf) {
+    pdf = require('html-pdf');
+  }
+  return pdf;
+}
 const { loadSettings } = require('../../middlewares/settings');
 const useLanguage = require('../../locale/useLanguage');
 const { useMoney, useDate } = require('../../settings');
@@ -66,7 +73,7 @@ exports.generatePdf = async (
   });
 
   await new Promise((resolve, reject) => {
-    pdf
+    getPdfEngine()
       .create(htmlContent, {
         format: info.format,
         orientation: 'portrait',
@@ -135,7 +142,7 @@ exports.generateMovementReportPdf = async (
   });
 
   await new Promise((resolve, reject) => {
-    pdf
+    getPdfEngine()
       .create(htmlContent, {
         format: info.format || 'A4',
         orientation: 'landscape',

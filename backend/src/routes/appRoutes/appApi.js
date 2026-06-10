@@ -2,8 +2,6 @@ const express = require('express');
 const { catchErrors } = require('../../handlers/errorHandlers');
 const router = express.Router();
 
-const movementsReport = require('../../controllers/reportsController/movementsReport');
-
 const appControllers = require('../../controllers/appControllers');
 const { routesList } = require('../../models/utils');
 
@@ -32,7 +30,17 @@ routesList.forEach(({ entity, controllerName }) => {
   routerApp(entity, controller);
 });
 
-router.route('/report/movements').get(catchErrors(movementsReport.list));
-router.route('/report/movements/pdf').get(catchErrors(movementsReport.pdf));
+router.route('/report/movements').get(
+  catchErrors((req, res, next) => {
+    const movementsReport = require('../../controllers/reportsController/movementsReport');
+    return movementsReport.list(req, res, next);
+  })
+);
+router.route('/report/movements/pdf').get(
+  catchErrors((req, res, next) => {
+    const movementsReport = require('../../controllers/reportsController/movementsReport');
+    return movementsReport.pdf(req, res, next);
+  })
+);
 
 module.exports = router;

@@ -4,11 +4,13 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const custom = require('../pdfController');
-
-const Invoice = mongoose.model('Invoice');
-const Payment = mongoose.model('Payment');
-const Quote = mongoose.model('Quote');
+function getModels() {
+  return {
+    Invoice: mongoose.model('Invoice'),
+    Payment: mongoose.model('Payment'),
+    Quote: mongoose.model('Quote'),
+  };
+}
 
 function parsePeriod(query) {
   const period = (query.period || 'monthly').toLowerCase();
@@ -69,6 +71,7 @@ function parsePeriod(query) {
 }
 
 async function fetchMovements(range) {
+  const { Invoice, Payment, Quote } = getModels();
   const { start, end } = range;
   const dateQuery = { $gte: start, $lte: end };
 
@@ -142,6 +145,7 @@ exports.pdf = async (req, res) => {
     const fileName = `movement-${crypto.randomBytes(6).toString('hex')}.pdf`;
     targetLocation = path.join(dir, fileName);
 
+    const custom = require('../pdfController');
     await custom.generateMovementReportPdf(
       { format: 'A4', targetLocation },
       {

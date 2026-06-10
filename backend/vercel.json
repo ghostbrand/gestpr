@@ -10,9 +10,15 @@
     { "source": "/api/ping", "destination": "/api/ping" },
     { "source": "/api/health", "destination": "/api/health" },
     { "source": "/api/login", "destination": "/api/login" },
-    { "source": "/api/(.*)", "destination": "/api" }
+    { "source": "/download/:path*", "destination": "/api/download/:path*" },
+    { "source": "/public/:path*", "destination": "/api/public/:path*" }
   ],
   "functions": {
+    "api/[...path].js": {
+      "maxDuration": 60,
+      "memory": 1024,
+      "includeFiles": "src/**"
+    },
     "api/index.js": {
       "maxDuration": 60,
       "memory": 1024,

@@ -1,13 +1,13 @@
 const createCRUDController = require('../middlewaresControllers/createCRUDController');
 const { routesList } = require('../../models/utils');
 
-const { globSync } = require('glob');
-const path = require('path');
-
-const pattern = './src/controllers/appControllers/*/**/';
-const controllerDirectories = globSync(pattern).map((filePath) => {
-  return path.basename(filePath);
-});
+// Lista fixa — glob com cwd relativo falha ou bloqueia na Vercel serverless
+const controllerDirectories = [
+  'clientController',
+  'invoiceController',
+  'paymentController',
+  'quoteController',
+];
 
 const appControllers = () => {
   const controllers = {};
