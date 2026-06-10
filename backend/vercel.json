@@ -10,8 +10,9 @@
     { "source": "/api/ping", "destination": "/api/ping" },
     { "source": "/api/health", "destination": "/api/health" },
     { "source": "/api/login", "destination": "/api/login" },
-    { "source": "/download/:path*", "destination": "/api/download/:path*" },
-    { "source": "/public/:path*", "destination": "/api/public/:path*" }
+    { "source": "/api/(.*)", "destination": "/api?path=$1" },
+    { "source": "/download/:path*", "destination": "/api?path=download/$1" },
+    { "source": "/public/:path*", "destination": "/api?path=public/$1" }
   ],
   "functions": {
     "api/[...path].js": {

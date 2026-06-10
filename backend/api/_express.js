@@ -6,11 +6,12 @@ let handler;
 let initPromise;
 
 function fixRequestUrl(req) {
-  const segments = req.query?.path;
+  const pathParam = req.query?.path;
+  const extraQuery = req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+  const qs = extraQuery.replace(/[?&]path=[^&]*/g, '').replace(/^&/, '?') || '';
 
-  if (segments) {
-    const joined = Array.isArray(segments) ? segments.join('/') : segments;
-    const qs = req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+  if (pathParam) {
+    const joined = Array.isArray(pathParam) ? pathParam.join('/') : pathParam;
 
     if (
       joined.startsWith('download/') ||
@@ -25,24 +26,42 @@ function fixRequestUrl(req) {
     return;
   }
 
+  // Rewrite /api/(.*) → /api strips the path; restore from Vercel headers
   const original =
     req.headers['x-invoke-path'] ||
     req.headers['x-vercel-original-url'] ||
-    req.headers['x-forwarded-uri'];
+    req.headers['x-forwarded-uri'] ||
+    req.headers['x-matched-path'];
 
-  if (!original || typeof original !== 'string') return;
-
-  if (original.startsWith('http')) {
-    try {
-      const url = new URL(original);
-      req.url = url.pathname + url.search;
-    } catch {
-      /* ignore */
+  if (original && typeof original === 'string') {
+    if (original.startsWith('http')) {
+      try {
+        const url = new URL(original);
+        req.url = url.pathname + url.search;
+        return;
+      } catch {
+        /* ignore */
+      }
     }
+
+    req.url = original.startsWith('/') ? original : `/${original}`;
     return;
   }
 
-  req.url = original.startsWith('/') ? original : `/${original}`;
+  // Fallback when rewrite leaves only /api
+  if (req.url === '/api' || req.url === '/api/') {
+    const raw = req.headers['x-vercel-sc-headers'];
+    if (typeof raw === 'string') {
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed.path) {
+          req.url = parsed.path.startsWith('/') ? parsed.path : `/${parsed.path}`;
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+  }
 }
 
 function handleOptions(req, res) {
